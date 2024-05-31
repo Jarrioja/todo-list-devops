@@ -1,0 +1,9 @@
+resources:
+- ../
+commonLabels:
+  app: todo-app
+  env: dev
+
+namePrefix: dev-
+
+namespace: dev
