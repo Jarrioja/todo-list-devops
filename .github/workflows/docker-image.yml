@@ -1,25 +1,26 @@
 name: Docker Image CI
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    push:
+        branches: ['main']
+    pull_request:
+        branches: ['main']
 
 jobs:
+    Build-and-push-image:
+        runs-on: ubuntu-latest
 
-  build:
+        steps:
+            - uses: actions/checkout@v4
 
-    runs-on: ubuntu-latest
+            - name: Log in to Docker Hub
+              run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
 
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: Log in to Docker Hub
-      run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
-      
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag jarrioja/todo-app:$(git rev-parse --short HEAD) --tag jarrioja/todo-app:latest
+            - name: Build the Docker image
+              run: docker build . --file Dockerfile --tag jarrioja/todo-app:$(git rev-parse --short HEAD) --tag jarrioja/todo-app:latest
 
-    - name: Push the Docker image
-      run: docker push --tag jarrioja/todo-app:$(git rev-parse --short HEAD) --tag jarrioja/todo-app:latest
+            - name: Push the Docker image current commit tag
+              run: docker push jarrioja/todo-app:$(git rev-parse --short HEAD)
+
+            - name: Push the Docker image latest tag
+              run: docker push jarrioja/todo-app:latest
