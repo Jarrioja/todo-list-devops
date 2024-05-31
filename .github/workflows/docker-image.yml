@@ -48,7 +48,7 @@ jobs:
 
             - name: Update deployment.yml
               run: |
-                  sed -i "s|image: jarrioja/todo-app:.*|image: jarrioja/todo-app:${{ steps.vars.outputs.short_commit_hash }}|g" kubernetes/deployment.yml
+                  sed -i "s|image: jarrioja/todo-app:.*|image: jarrioja/todo-app:${{ steps.vars.outputs.short_commit_hash }}|g" kubernetes/base/deployment.yml
                   cat kubernetes/deployment.yml
 
             - name: Commit changes.
