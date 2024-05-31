@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: todo-app
-        image: jarrioja/todo-app:95e8756
+        image: jarrioja/todo-app:667c6ed
         ports:
         - containerPort: 3000
         envFrom:
