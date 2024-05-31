@@ -49,7 +49,7 @@ jobs:
                   sed -i "s|image: jarrioja/todo-app:.*|image: jarrioja/todo-app:${{ steps.vars.outputs.short_commit_hash }}|g" kubernetes/deployment.yml
                   cat kubernetes/deployment.yml
 
-            - name: Commit changes
+            - name: Commit changes.
               run: |
                   git add kubernetes/deployment.yml
                   git commit -m "Update image tag to ${{ steps.vars.outputs.short_commit_hash }}"
