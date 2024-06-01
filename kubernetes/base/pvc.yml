@@ -7,5 +7,4 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi
-  storageClassName: local-storage
+      storage: 2Gi
