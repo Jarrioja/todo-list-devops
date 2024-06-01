@@ -1,10 +1,10 @@
-name: Docker Image CI
+name: CI / CD
 
 on:
     push:
-        branches: ['main']
+        branches: ['main', 'dev']
     pull_request:
-        branches: ['main']
+        branches: ['main', 'dev']
 permissions:
     contents: write
 
@@ -20,7 +20,15 @@ jobs:
               run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
 
             - name: Build the Docker image
-              run: docker build . --file Dockerfile --tag jarrioja/todo-app:$(git rev-parse --short HEAD) --tag jarrioja/todo-app:latest
+              run: docker build . \
+                  --file Dockerfile \
+                  --tag jarrioja/todo-app:$(git rev-parse --short HEAD) \
+                  --tag jarrioja/todo-app:latest \
+                  --build-arg MYSQL_HOST=${{ secrets.MYSQL_HOST }} \
+                  --build-arg MYSQL_USER=${{ secrets.MYSQL_USER }} \
+                  --build-arg MYSQL_DB=${{ secrets.MYSQL_DB }} \
+                  --build-arg MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} \
+                  --build-arg MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}
 
             - name: Push the Docker image current commit tag
               run: docker push jarrioja/todo-app:$(git rev-parse --short HEAD)
