@@ -7,4 +7,4 @@ commonLabels:
 
 images:
   - name: jarrioja/todo-app
-    newTag: 9938473
+    newTag: "9938473"

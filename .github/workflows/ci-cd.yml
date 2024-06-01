@@ -50,7 +50,7 @@ jobs:
 
             - name: Update production/kustomization.yaml
               run: |
-                  sed -i "s|newTag:.*|newTag: ${{ steps.vars.outputs.short_commit_hash }}|g" kubernetes/production/kustomization.yaml
+                  sed -i "s|newTag:.*|newTag: "${{ steps.vars.outputs.short_commit_hash }}"|g" kubernetes/production/kustomization.yaml
                   cat kubernetes/production/kustomization.yaml
 
             - name: Commit changes.
@@ -102,7 +102,7 @@ jobs:
 
             - name: Update staging/kustomization.yaml
               run: |
-                  sed -i "s|newTag:.*|newTag: ${{ steps.vars.outputs.short_commit_hash }}|g" kubernetes/staging/kustomization.yaml
+                  sed -i "s|newTag:.*|newTag: "${{ steps.vars.outputs.short_commit_hash }}"|g" kubernetes/staging/kustomization.yaml
                   cat kubernetes/staging/kustomization.yaml
 
             - name: Commit changes.
