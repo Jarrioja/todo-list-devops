@@ -8,7 +8,7 @@ namespace: staging
 
 images:
   - name: jarrioja/todo-app
-    newTag: 740205e
+    newTag: 77308c6
 
 patches:
   - target:
@@ -31,5 +31,5 @@ patches:
     patch: |
       - op: replace
         path: /spec/rules/0/host
-        value: dev-todo-app.jesusarrioja.com
+        value: staging-todo-app.jesusarrioja.com
       
