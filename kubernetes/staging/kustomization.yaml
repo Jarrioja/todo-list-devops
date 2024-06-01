@@ -8,7 +8,7 @@ namespace: staging
 
 images:
   - name: jarrioja/todo-app
-    newTag: 29660b1
+    newTag: 4c9f57c
 
 patches:
   - target:
