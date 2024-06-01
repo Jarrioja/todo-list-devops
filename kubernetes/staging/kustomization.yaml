@@ -21,3 +21,11 @@ patches:
       - op: replace
         path: /metadata/name
         value: staging-pv
+  - target:
+      kind: deployment
+      name: mysql
+    patch: |
+      - op: replace
+        path: /spec/volumes/0/persistentVolumeClaim/claimName
+        value: staging-pv
+      
