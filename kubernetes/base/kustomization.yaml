@@ -4,11 +4,9 @@ resources:
 - deployment.yml
 - service.yml
 - ingress.yml
-- mysql-deployment.yml
-- mysql-service.yml
-- mysql-pvc.yml
-- mysql-pv.yml
-
+- mysql.yml
+- pv.yml
+- pvc.yml
 commonLabels:
   app: todo-app
 
