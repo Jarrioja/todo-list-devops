@@ -5,3 +5,7 @@ commonLabels:
   env: staging
 
 namespace: staging
+
+images:
+  - name: jarrioja/todo-app
+    newTag: staging
