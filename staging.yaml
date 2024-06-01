@@ -1,0 +1,168 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: todo-app
+    env: staging
+  name: mysql
+  namespace: staging
+spec:
+  ports:
+  - port: 3306
+    protocol: TCP
+    targetPort: 3306
+  selector:
+    app: todo-app
+    env: staging
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: todo-app
+    env: staging
+  name: todo-app
+  namespace: staging
+spec:
+  ports:
+  - port: 3000
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app: todo-app
+    env: staging
+  type: ClusterIP
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  labels:
+    app: todo-app
+    env: staging
+  name: staging-pv
+spec:
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  local:
+    path: /mnt/disks/staging-mysql
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - devops-node-pool-rmzen
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-storage
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    app: todo-app
+    env: staging
+  name: pvc
+  namespace: staging
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: local-storage
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: todo-app
+    env: staging
+  name: mysql
+  namespace: staging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo-app
+      env: staging
+  template:
+    metadata:
+      labels:
+        app: todo-app
+        env: staging
+    spec:
+      containers:
+      - envFrom:
+        - secretRef:
+            name: mysql-secret
+        image: mysql:5.7
+        name: mysql
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: mysql-persistent-storage
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql-pvc
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: todo-app
+    env: staging
+  name: todo-app
+  namespace: staging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo-app
+      env: staging
+  template:
+    metadata:
+      labels:
+        app: todo-app
+        env: staging
+    spec:
+      containers:
+      - image: jarrioja/todo-app:2e8aa09
+        name: todo-app
+        ports:
+        - containerPort: 3000
+        resources:
+          limits:
+            cpu: 500m
+            memory: 500Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  labels:
+    app: todo-app
+    env: staging
+  name: todo-app-ingress
+  namespace: staging
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: todo-app.jesusarrioja.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: todo-app
+            port:
+              number: 3000
+        path: /
+        pathType: Prefix
