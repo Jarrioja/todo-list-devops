@@ -10,7 +10,7 @@ permissions:
 
 jobs:
     Build-and-push-image-production:
-        name: Build and push Docker image on production
+        name: '[Production] Build and push Docker image'
         runs-on: ubuntu-latest
         environment:
             name: production
@@ -62,7 +62,7 @@ jobs:
                   git push
 
     Build-and-push-image-staging:
-        name: Build and push Docker image on staging
+        name: '[Staging] Build and push Docker image'
         runs-on: ubuntu-latest
         environment:
             name: staging
