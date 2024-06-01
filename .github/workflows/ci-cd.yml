@@ -2,18 +2,19 @@ name: CI / CD
 
 on:
     push:
-        branches: ['main', 'dev']
+        branches: ['main', 'staging']
     pull_request:
-        branches: ['main', 'dev']
+        branches: ['main', 'staging']
 permissions:
     contents: write
 
 jobs:
-    Build-and-push-image-prod:
-        name: Build and push Docker image on production
+    Build-and-push-image-production:
+        name: '[Production] Build and push Docker image'
         runs-on: ubuntu-latest
         environment:
-            name: prod
+            name: production
+        if: github.ref == 'refs/heads/main'
         steps:
             - uses: actions/checkout@v4
 
@@ -29,12 +30,12 @@ jobs:
             - name: Push the Docker image latest tag
               run: docker push jarrioja/todo-app:latest
 
-    update-deployment-prod:
-        name: Update deployment on production
+    update-kuztomize-production:
+        name: Update kuztomize on production
         runs-on: ubuntu-latest
-        needs: Build-and-push-image-prod
+        needs: Build-and-push-image-production
         environment:
-            name: prod
+            name: production
 
         steps:
             - name: Checkout repository
@@ -47,24 +48,25 @@ jobs:
 
             - name: Get short commit hash
               id: vars
-              run: echo " name=short_commit_hash::$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+              run: echo "short_commit_hash=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
-            - name: Update deployment.yml
+            - name: Update production/kustomization.yaml
               run: |
-                  sed -i "s|image: jarrioja/todo-app:.*|image: jarrioja/todo-app:${{ steps.vars.outputs.short_commit_hash }}|g" kubernetes/base/deployment.yml
-                  cat kubernetes/base/deployment.yml
+                  sed -i "s|newTag:.*|newTag: ${{ steps.vars.outputs.short_commit_hash }}|g" kubernetes/production/kustomization.yaml
+                  cat kubernetes/production/kustomization.yaml
 
             - name: Commit changes.
               run: |
-                  git add kubernetes/base/deployment.yml
+                  git add kubernetes/production/kustomization.yaml
                   git commit -m "Update image tag to ${{ steps.vars.outputs.short_commit_hash }}"
                   git push
 
-    Build-and-push-image-dev:
-        name: Build and push Docker image on production
+    Build-and-push-image-staging:
+        name: '[Staging] Build and push Docker image'
         runs-on: ubuntu-latest
         environment:
-            name: dev
+            name: staging
+        if: github.ref == 'refs/heads/staging'
         steps:
             - uses: actions/checkout@v4
 
@@ -80,12 +82,12 @@ jobs:
             - name: Push the Docker image latest tag
               run: docker push jarrioja/todo-app:latest
 
-    update-deployment-dev:
-        name: Update deployment on production
+    update-kuztomize-staging:
+        name: Update kuztomize on staging
         runs-on: ubuntu-latest
-        needs: Build-and-push-image-prod
+        needs: Build-and-push-image-staging
         environment:
-            name: dev
+            name: staging
 
         steps:
             - name: Checkout repository
@@ -98,15 +100,15 @@ jobs:
 
             - name: Get short commit hash
               id: vars
-              run: echo " name=short_commit_hash::$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+              run: echo "short_commit_hash=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
-            - name: Update deployment.yml
+            - name: Update staging/kustomization.yaml
               run: |
-                  sed -i "s|image: jarrioja/todo-app:.*|image: jarrioja/todo-app:dev-${{ steps.vars.outputs.short_commit_hash }}|g" kubernetes/base/deployment.yml
-                  cat kubernetes/base/deployment.yml
+                  sed -i "s|newTag:.*|newTag: ${{ steps.vars.outputs.short_commit_hash }}|g" kubernetes/staging/kustomization.yaml
+                  cat kubernetes/staging/kustomization.yaml
 
             - name: Commit changes.
               run: |
-                  git add kubernetes/base/deployment.yml
+                  git add kubernetes/staging/kustomization.yaml
                   git commit -m "Update image tag to ${{ steps.vars.outputs.short_commit_hash }}"
                   git push
