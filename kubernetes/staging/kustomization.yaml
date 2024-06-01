@@ -9,3 +9,15 @@ namespace: staging
 images:
   - name: jarrioja/todo-app
     newTag: 2e8aa09
+
+patches:
+  - target:
+      kind: PersistentVolume
+      name: pv
+    patch: |
+      - op: replace
+        path: /spec/local/path
+        value: /mnt/disks/staging-mysql
+      - op: replace
+        path: /metadata/name
+        value: staging-pv
