@@ -1,7 +1,0 @@
-resources:
-- ../base
-
-commonLabels:
-  app: todo-app
-  env: prod
-namePrefix: prod-

@@ -1,0 +1,7 @@
+resources:
+- ../base/
+commonLabels:
+  app: todo-app
+  env: staging
+
+namespace: staging

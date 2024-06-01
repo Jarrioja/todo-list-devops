@@ -52,8 +52,8 @@ jobs:
 
             - name: Update deployment.yml
               run: |
-                  sed -i "s|image: jarrioja/todo-app:.*|image: jarrioja/todo-app:${{ steps.vars.outputs.short_commit_hash }}|g" kubernetes/base/deployment.yml
-                  cat kubernetes/base/deployment.yml
+                  sed -i "s|newTag:.*|newTag: ${{ steps.vars.outputs.short_commit_hash }}|g" kubernetes/production/kustomization.yaml
+                  cat kubernetes/production/kustomization.yaml
 
             - name: Commit changes.
               run: |
@@ -104,8 +104,8 @@ jobs:
 
             - name: Update deployment.yml
               run: |
-                  sed -i "s|image: jarrioja/todo-app:.*|image: jarrioja/todo-app:${{ steps.vars.outputs.short_commit_hash }}|g" kubernetes/base/deployment.yml
-                  cat kubernetes/base/deployment.yml
+                  sed -i "s|newTag:.*|newTag: ${{ steps.vars.outputs.short_commit_hash }}|g" kubernetes/staging/kustomization.yaml
+                  cat kubernetes/staging/kustomization.yaml
 
             - name: Commit changes.
               run: |

@@ -1,0 +1,10 @@
+resources:
+- ../base/
+
+commonLabels:
+  app: todo-app
+  env: production
+
+images:
+  - name: jarrioja/todo-app
+    newTag: production
