@@ -8,7 +8,7 @@ namespace: staging
 
 images:
   - name: jarrioja/todo-app
-    newTag: 4c9f57c
+    newTag: 52eb281
 
 patches:
   - target:
@@ -25,4 +25,11 @@ patches:
       - op: replace
         path: /spec/volumes/0/persistentVolumeClaim/claimName
         value: staging-pv
+  - target:
+      kind: Ingress
+      name: todo-app-ingress
+    patch: |
+      - op: replace
+        path: /spec/rules/0/host
+        value: staging-todo-app.jesusarrioja.com
       
