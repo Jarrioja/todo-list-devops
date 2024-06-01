@@ -2,9 +2,9 @@ name: CI / CD
 
 on:
     push:
-        branches: ['main', 'dev']
+        branches: ['main', 'staging']
     pull_request:
-        branches: ['main', 'dev']
+        branches: ['main', 'staging']
 permissions:
     contents: write
 
@@ -60,11 +60,11 @@ jobs:
                   git commit -m "Update image tag to ${{ steps.vars.outputs.short_commit_hash }}"
                   git push
 
-    Build-and-push-image-dev:
-        name: Build and push Docker image on production
+    Build-and-push-image-staging:
+        name: Build and push Docker image on staging
         runs-on: ubuntu-latest
         environment:
-            name: dev
+            name: staging
         steps:
             - uses: actions/checkout@v4
 
@@ -80,12 +80,12 @@ jobs:
             - name: Push the Docker image latest tag
               run: docker push jarrioja/todo-app:latest
 
-    update-deployment-dev:
-        name: Update deployment on production
+    update-deployment-staging:
+        name: Update deployment on staging
         runs-on: ubuntu-latest
         needs: Build-and-push-image-prod
         environment:
-            name: dev
+            name: staging
 
         steps:
             - name: Checkout repository
@@ -102,7 +102,7 @@ jobs:
 
             - name: Update deployment.yml
               run: |
-                  sed -i "s|image: jarrioja/todo-app:.*|image: jarrioja/todo-app:dev-${{ steps.vars.outputs.short_commit_hash }}|g" kubernetes/base/deployment.yml
+                  sed -i "s|image: jarrioja/todo-app:.*|image: jarrioja/todo-app:staging-${{ steps.vars.outputs.short_commit_hash }}|g" kubernetes/base/deployment.yml
                   cat kubernetes/base/deployment.yml
 
             - name: Commit changes.
