@@ -48,7 +48,7 @@ jobs:
 
             - name: Get short commit hash
               id: vars
-              run: echo " name=short_commit_hash::$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+              run: echo "short_commit_hash=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
             - name: Update deployment.yml
               run: |
@@ -100,7 +100,7 @@ jobs:
 
             - name: Get short commit hash
               id: vars
-              run: echo " name=short_commit_hash::$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+              run: echo "short_commit_hash=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
             - name: Update deployment.yml
               run: |
