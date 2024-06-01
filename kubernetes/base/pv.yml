@@ -16,6 +16,6 @@ spec:
             - key: kubernetes.io/hostname
               operator: In
               values:
-                - devops-node-pool-rmzen
+                - node1
   persistentVolumeReclaimPolicy: Retain
   storageClassName: local-storage
