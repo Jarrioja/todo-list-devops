@@ -12,7 +12,8 @@ jobs:
     Build-and-push-image:
         name: Build and push Docker image
         runs-on: ubuntu-latest
-
+        environment:
+            name: prod
         steps:
             - uses: actions/checkout@v4
 
@@ -52,7 +53,7 @@ jobs:
 
             - name: Get short commit hash
               id: vars
-              run: echo "::set-output name=short_commit_hash::$(git rev-parse --short HEAD)"
+              run: echo " name=short_commit_hash::$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
             - name: Update deployment.yml
               run: |
