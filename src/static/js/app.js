@@ -4,7 +4,7 @@ function App() {
         <Container>
             <Row>
                 <Col md={{ offset: 3, span: 6 }}>
-                    <h1> Devops todo-app example - Jesus Arrioja</h1>
+                    <h3> Devops example - Jesus Arrioja</h3>
                     <TodoListCard />
                     <p className="text-center">
                         Estas viendo la app en el ambiente de
