@@ -8,3 +8,11 @@ commonLabels:
 images:
   - name: jarrioja/todo-app
     newTag: 8c6fb43
+
+patches:
+  - target:
+      kind: Ingress
+    patch: |-
+      - op: replace
+        path: /spec/rules/0/host
+        value: todo-app.jesusarrioja.com
