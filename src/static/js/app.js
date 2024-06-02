@@ -5,6 +5,17 @@ function App() {
             <Row>
                 <Col md={{ offset: 3, span: 6 }}>
                     <TodoListCard />
+                    <p className="text-center">
+                        Estas viendo la app en el ambiente de
+                        <strong>
+                            <i> Staging</i>
+                        </strong>
+                        , hosteada en un cluster de kubernetes en DigitalOcean.
+                        hecho por{' '}
+                        <a href="https://github.com/jarrioja" target="_blank">
+                            Jesus Arrioja
+                        </a>
+                    </p>
                 </Col>
             </Row>
         </Container>
@@ -16,20 +27,20 @@ function TodoListCard() {
 
     React.useEffect(() => {
         fetch('/items')
-            .then(r => r.json())
+            .then((r) => r.json())
             .then(setItems);
     }, []);
 
     const onNewItem = React.useCallback(
-        newItem => {
+        (newItem) => {
             setItems([...items, newItem]);
         },
         [items],
     );
 
     const onItemUpdate = React.useCallback(
-        item => {
-            const index = items.findIndex(i => i.id === item.id);
+        (item) => {
+            const index = items.findIndex((i) => i.id === item.id);
             setItems([
                 ...items.slice(0, index),
                 item,
@@ -40,8 +51,8 @@ function TodoListCard() {
     );
 
     const onItemRemoval = React.useCallback(
-        item => {
-            const index = items.findIndex(i => i.id === item.id);
+        (item) => {
+            const index = items.findIndex((i) => i.id === item.id);
             setItems([...items.slice(0, index), ...items.slice(index + 1)]);
         },
         [items],
@@ -53,9 +64,11 @@ function TodoListCard() {
         <React.Fragment>
             <AddItemForm onNewItem={onNewItem} />
             {items.length === 0 && (
-                <p className="text-center">¡Aún no hay artículos! ¡Agrega uno arriba!</p>
+                <p className="text-center">
+                    ¡Aún no hay artículos! ¡Agrega uno arriba!
+                </p>
             )}
-            {items.map(item => (
+            {items.map((item) => (
                 <ItemDisplay
                     item={item}
                     key={item.id}
@@ -73,7 +86,7 @@ function AddItemForm({ onNewItem }) {
     const [newItem, setNewItem] = React.useState('');
     const [submitting, setSubmitting] = React.useState(false);
 
-    const submitNewItem = e => {
+    const submitNewItem = (e) => {
         e.preventDefault();
         setSubmitting(true);
         fetch('/items', {
@@ -81,8 +94,8 @@ function AddItemForm({ onNewItem }) {
             body: JSON.stringify({ name: newItem }),
             headers: { 'Content-Type': 'application/json' },
         })
-            .then(r => r.json())
-            .then(item => {
+            .then((r) => r.json())
+            .then((item) => {
                 onNewItem(item);
                 setSubmitting(false);
                 setNewItem('');
@@ -94,7 +107,7 @@ function AddItemForm({ onNewItem }) {
             <InputGroup className="mb-3">
                 <Form.Control
                     value={newItem}
-                    onChange={e => setNewItem(e.target.value)}
+                    onChange={(e) => setNewItem(e.target.value)}
                     type="text"
                     placeholder="Nuevos Items"
                     aria-describedby="basic-addon1"
@@ -126,7 +139,7 @@ function ItemDisplay({ item, onItemUpdate, onItemRemoval }) {
             }),
             headers: { 'Content-Type': 'application/json' },
         })
-            .then(r => r.json())
+            .then((r) => r.json())
             .then(onItemUpdate);
     };
 
