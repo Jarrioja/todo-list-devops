@@ -4,7 +4,6 @@ function App() {
         <Container>
             <Row>
                 <Col md={{ offset: 3, span: 6 }}>
-                    <h3> Devops example - Jesus Arrioja</h3>
                     <TodoListCard />
                     <p className="text-center">
                         Estas viendo la app en el ambiente de
@@ -12,6 +11,10 @@ function App() {
                             <i> Staging</i>
                         </strong>
                         , hosteada en un cluster de kubernetes en DigitalOcean.
+                        hecho por{' '}
+                        <a href="https://github.com/jarrioja" target="_blank">
+                            Jesus Arrioja
+                        </a>
                     </p>
                 </Col>
             </Row>
