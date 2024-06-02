@@ -8,7 +8,7 @@ function App() {
                     <p className="text-center">
                         Estas viendo la app en el ambiente de
                         <strong>
-                            <i> Staging</i>
+                            <i> Production</i>
                         </strong>
                         , hosteada en un cluster de kubernetes en DigitalOcean.
                         hecho por{' '}
