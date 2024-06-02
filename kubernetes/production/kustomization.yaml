@@ -7,7 +7,7 @@ commonLabels:
 
 images:
   - name: jarrioja/todo-app
-    newTag: 8c6fb43
+    newTag: e46fbc7
 
 patches:
   - target:
